@@ -277,3 +277,49 @@ jobs:
           files: |
             ${{ steps.package.outputs.package_path }}
             ${{ steps.metadata.outputs.metadata_path }}
+
+      - name: Checkout builds repository
+        if: steps.resolve.outputs.publish_release == 'true' && steps.release_check.outputs.release_exists != 'true'
+        uses: actions/checkout@v4
+        with:
+          path: builds-repo
+          sparse-checkout: |
+            versions.json
+
+      - name: Update manifest version
+        if: steps.resolve.outputs.publish_release == 'true' && steps.release_check.outputs.release_exists != 'true'
+        shell: pwsh
+        env:
+          TAG_NAME: ${{ steps.resolve.outputs.tag_name }}
+          ASSET_NAME: ${{ steps.resolve.outputs.asset_name }}
+          MODE: ${{ steps.resolve.outputs.mode }}
+          REPOSITORY: ${{ github.repository }}
+        run: |
+          $manifestPath = "builds-repo/versions.json"
+          if (Test-Path $manifestPath) {
+            $json = Get-Content $manifestPath | ConvertFrom-Json
+          } else {
+            $json = [ordered]@{
+              stable = @{ version = ""; url = "" }
+              edge = @{ version = ""; url = "" }
+            }
+          }
+
+          $url = "https://github.com/$env:REPOSITORY/releases/download/$env:TAG_NAME/$env:ASSET_NAME"
+          
+          if ($env:MODE -eq 'master') {
+            $json.stable.version = $env:TAG_NAME
+            $json.stable.url = $url
+          } else {
+            $json.edge.version = $env:TAG_NAME
+            $json.edge.url = $url
+          }
+
+          $json | ConvertTo-Json -Depth 4 | Out-File -FilePath $manifestPath -Encoding utf8
+
+          cd builds-repo
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add versions.json
+          git commit -m "chore: update manifest to $env:TAG_NAME [skip ci]"
+          git push origin nightly-action

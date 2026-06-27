@@ -204,6 +204,12 @@ jobs:
             throw "Expected build output directory not found: $artifactDir"
           }
 
+          # Download OptiPatcher
+          $pluginsDir = "$artifactDir\plugins"
+          New-Item -ItemType Directory -Force -Path $pluginsDir
+          Write-Host "Downloading OptiPatcher.asi..."
+          Invoke-WebRequest -Uri "https://github.com/optiscaler/OptiPatcher/releases/download/rolling/OptiPatcher.asi" -OutFile "$pluginsDir\OptiPatcher.asi"
+
           $packagePath = "${{ runner.temp }}\$env:ASSET_NAME"
           if (Test-Path $packagePath) {
             Remove-Item -Force $packagePath

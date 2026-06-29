@@ -107,9 +107,10 @@ jobs:
               $assetName = "OptiScaler_master_${shortSha}.7z"
             }
             'latest-any' {
-              $tagName = "any-$branchSlug-$shortSha"
-              $releaseName = "latest-any: $branchName @ $shortSha"
-              $assetName = "OptiScaler_any_${branchSlug}_${shortSha}.7z"
+              $dateStamp = $latest.CommitDate.ToString('yyyy.MM.dd')
+              $tagName = "edge-$dateStamp-$shortSha"
+              $releaseName = "edge: $branchName @ $shortSha ($dateStamp)"
+              $assetName = "optiscaler-edge.7z"
             }
           }
 

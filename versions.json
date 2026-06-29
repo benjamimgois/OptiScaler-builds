@@ -4,7 +4,7 @@
     "url": "https://github.com/benjamimgois/OptiScaler-builds/releases/download/0.9.3-0/optiscaler-stable.7z"
   },
   "edge": {
-    "version": "edge-0.9.4-2",
-    "url": "https://github.com/benjamimgois/OptiScaler-builds/releases/download/edge-0.9.4-2/optiscaler-edge.7z"
+    "version": "any-master-f1fe72f2",
+    "url": "https://github.com/benjamimgois/OptiScaler-builds/releases/download/any-master-f1fe72f2/OptiScaler_any_master_f1fe72f2.7z"
   }
 }

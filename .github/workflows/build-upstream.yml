@@ -70,6 +70,13 @@ jobs:
             $sha = $branch.commit.sha
             $commit = Get-Commit $sha
             $commitDate = $commit.commit.committer.date
+
+            # Fetch the latest stable release tag of upstream OptiScaler
+            $latestRelease = Get-Json "https://api.github.com/repos/$repo/releases/latest"
+            $latestTag = $latestRelease.tag_name
+            if ($latestTag.StartsWith("v")) {
+              $latestTag = $latestTag.Substring(1)
+            }
           }
           elseif ($mode -eq 'latest-any') {
             $branches = Get-Json "https://api.github.com/repos/$repo/branches?per_page=100"
@@ -102,9 +109,9 @@ jobs:
 
           switch ($mode) {
             'master' {
-              $tagName = "master-$shortSha"
-              $releaseName = "master @ $shortSha"
-              $assetName = "OptiScaler_master_${shortSha}.7z"
+              $tagName = "stable-$latestTag"
+              $releaseName = "stable @ $latestTag"
+              $assetName = "OptiScaler_stable_${latestTag}.7z"
             }
             'latest-any' {
               $dateStamp = $latest.CommitDate.ToString('yyyy.MM.dd')

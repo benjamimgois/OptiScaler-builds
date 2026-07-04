@@ -65,15 +65,16 @@ jobs:
           $publishRelease = $env:PUBLISH_RELEASE -eq 'true'
 
           if ($mode -eq 'master') {
-            $branchName = 'master'
-            $branch = Get-BranchHead $branchName
-            $sha = $branch.commit.sha
-            $commit = Get-Commit $sha
-            $commitDate = $commit.commit.committer.date
-
             # Fetch the latest stable release tag of upstream OptiScaler
             $latestRelease = Get-Json "https://api.github.com/repos/$repo/releases/latest"
             $latestTag = $latestRelease.tag_name
+
+            # Fetch the commit corresponding to the latest release tag
+            $commit = Get-Json "https://api.github.com/repos/$repo/commits/$latestTag"
+            $sha = $commit.sha
+            $commitDate = $commit.commit.committer.date
+            $branchName = $latestTag
+
             if ($latestTag.StartsWith("v")) {
               $latestTag = $latestTag.Substring(1)
             }

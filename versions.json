@@ -1,7 +1,7 @@
 {
   "stable": {
-    "version": "stable-0.9.3",
-    "url": "https://github.com/benjamimgois/OptiScaler-builds/releases/download/stable-0.9.3/OptiScaler_stable_0.9.3.7z"
+    "version": "stable-0.9.4",
+    "url": "https://github.com/benjamimgois/OptiScaler-builds/releases/download/stable-0.9.4/OptiScaler_stable_0.9.4.7z"
   },
   "edge": {
     "version": "edge-2026.07.17-f54ef892",

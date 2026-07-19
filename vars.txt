@@ -1,4 +1,4 @@
-fsrstable=4.1
+fsrstable=4.1.1
 fsredge=4.1.1
 xessstable=3.0.1
 xessedge=3.0.1
